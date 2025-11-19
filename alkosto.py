@@ -250,14 +250,6 @@ def main():
 
 if __name__ == "__main__":
     try:
-        
-        # Iniciar el hilo para inicializar el dispositivo
-    
-       # clock.iniLcd()
-        # Ejecutar la función principal
-         # Mostrar la hora e IP en el display
-        #clock.timerLcd()
-
         main()
     except KeyboardInterrupt:
         print("Programa terminado.")
