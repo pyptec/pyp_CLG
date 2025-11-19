@@ -33,7 +33,7 @@ TRAMA=")\r\n"
 CHEQUEOTEMPERATURA = 60
 
 # Tiempo de publicidades
-PERIODO_PUBLICIDAD=90
+PERIODO_PUBLICIDAD=900
 SEC=1
 
 # Índice actual de publicidad (inicia en 0)
