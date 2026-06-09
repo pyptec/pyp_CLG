@@ -16,7 +16,8 @@ HTML = """
   <title>Cliente Ganador - Publicidad</title>
   <style>
     body { font-family: Arial; background:#f4f6f8; padding:30px; }
-    .box { background:white; padding:25px; border-radius:12px; max-width:700px; margin:auto; }
+    .box { position:relative; background:white; padding:25px; border-radius:12px; max-width:700px; margin:auto; }
+    .logo { position:absolute; top:18px; right:18px; width:70px; height:70px; object-fit:contain; border-radius:50%; }
     h2 { color:#1f2937; }
     table { width:100%; border-collapse:collapse; margin-top:20px; }
     td, th { padding:10px; border-bottom:1px solid #ddd; }
@@ -27,6 +28,7 @@ HTML = """
 </head>
 <body>
 <div class="box">
+  <img class="logo" src="/logo" alt="PYP Tecnología">
   <h2>Cliente Ganador - Gestión de Publicidad</h2>
 
   <form method="POST" enctype="multipart/form-data" action="/upload">
