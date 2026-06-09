@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 
 APP_DIR = "/home/pi/alkosto/publicidad"
+LOGO_FILE = "/home/pi/alkosto/logo/logo_pyp.jpg"
 ALLOWED = {"mp3", "wav", "mp4"}
 
 app = Flask(__name__)
@@ -58,6 +59,12 @@ def allowed(filename):
 def index():
     files = sorted(os.listdir(APP_DIR))
     return render_template_string(HTML, files=files)
+  
+@app.route("/logo")
+def logo():
+    logo_dir = os.path.dirname(LOGO_FILE)
+    logo_name = os.path.basename(LOGO_FILE)
+    return send_from_directory(logo_dir, logo_name)
 
 @app.route("/upload", methods=["POST"])
 def upload():
