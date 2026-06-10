@@ -59,13 +59,7 @@ MPLAYER_FLAGS = "-really-quiet -nolirc -nojoystick -noautosub -vo null -ao alsa 
 
 _player = None  # proceso actual (si quieres evitar solapes)
 
-modbus_ctrl = modbus_relay.ModbusRelayController(
-    serial_port=UART,
-    config=RELAY_CONFIG,
-    switch_to_modbus=serial_a_modbus_on,
-    switch_to_serial=serial_a_modbus_off,
-    logger=util.logging
-)
+modbus_ctrl = None
 
 
 def _spawn_player(path):
@@ -200,6 +194,24 @@ except:
     exit
     
 RELAY_CONFIG = modbus_relay.cargar_config("/home/pi/.scr/.scr/pyp_CLG/relay_config.yml")
+
+try:
+    UART = serial.Serial("/dev/ttyS0", baudrate=9600, timeout=1)
+except Exception as e:
+    Temp.on_hardware("No hay pto serie ")
+    util.logging.error(f"No se pudo abrir /dev/ttyS0: {e}")
+    audio_error()
+    raise SystemExit(1)
+
+RELAY_CONFIG = modbus_relay.cargar_config("/home/pi/.scr/.scr/pyp_CLG/relay_config.yml")
+
+modbus_ctrl = modbus_relay.ModbusRelayController(
+    serial_port=UART,
+    config=RELAY_CONFIG,
+    switch_to_modbus=serial_a_modbus_on,
+    switch_to_serial=serial_a_modbus_off,
+    logger=util.logging
+)
 #------------------------------
 # Funcion principal
 #-----------------------------
