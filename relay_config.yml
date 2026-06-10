@@ -1,0 +1,47 @@
+# Configuración de relés Modbus para CLG - Cliente Ganador
+modbus:
+  enabled: true
+  port: "/dev/ttyS0"
+  baudrate: 9600
+  timeout: 0.5
+  coil_address: 0
+
+selector:
+  stabilization_time_sec: 0.35
+
+evento_ganador:
+  tiempo_total_seg: 120
+  tiempo_on_seg: 2
+  tiempo_off_seg: 2
+  apagar_rele_al_finalizar: true
+
+cabinas:
+  "01":
+    enabled: true
+    nombre: "Cabina 01"
+    slave_id: 1
+
+  "02":
+    enabled: true
+    nombre: "Cabina 02"
+    slave_id: 2
+
+  "03":
+    enabled: true
+    nombre: "Cabina 03"
+    slave_id: 3
+
+  "04":
+    enabled: true
+    nombre: "Cabina 04"
+    slave_id: 4
+
+  "05":
+    enabled: true
+    nombre: "Cabina 05"
+    slave_id: 5
+
+  "06":
+    enabled: true
+    nombre: "Cabina 06"
+    slave_id: 6

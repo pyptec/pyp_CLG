@@ -8,6 +8,7 @@ import util
 import shlex
 #import clock
 from pathlib import Path
+import modbus_relay
 
 # constantes de programa
 FORMATO_DATE="%d/%m/%Y %H:%M "
@@ -58,6 +59,14 @@ MPLAYER_FLAGS = "-really-quiet -nolirc -nojoystick -noautosub -vo null -ao alsa 
 
 _player = None  # proceso actual (si quieres evitar solapes)
 
+modbus_ctrl = modbus_relay.ModbusRelayController(
+    serial_port=UART,
+    config=RELAY_CONFIG,
+    switch_to_modbus=serial_a_modbus_on,
+    switch_to_serial=serial_a_modbus_off,
+    logger=util.logging
+)
+
 
 def _spawn_player(path):
     global _player
@@ -86,12 +95,27 @@ def _spawn_player(path):
 ########################################
 #graba la hora del cmd serie del premio
 ########################################
-def display(msj):  
+def display(msj, data_serial=None):  
     reporte(msj)
-    rele_bombillo_on()
+
+    # El audio ya se lanza en background con _spawn_player()
     audio_ganador()
-    time.sleep(10)
-    rele_bombillo_off()
+
+    if data_serial is None:
+        util.logging.warning("No llegó número de cabina. No se activa Modbus.")
+        return
+
+    try:
+        modbus_ctrl.activar_cabina_ganadora(data_serial)
+    except Exception as e:
+        util.logging.error(f"No se pudo activar cabina ganadora por Modbus: {e}")
+        serial_a_modbus_off()
+#def display(msj):  
+#    reporte(msj)
+#    rele_bombillo_on()
+#    audio_ganador()
+#    time.sleep(10)
+#    rele_bombillo_off()
 def on_hardware(msj):   
     print(msj + ' ' + time.strftime(FORMATO_DATE))
     reporte(msj)
@@ -126,6 +150,19 @@ def rele_bombillo_off():
     GPIO.output(GPIO_05_PILOTO,False)
     GPIO.output(GPIO_10_RELE,False)
     util.logging.info("Rele_OFF")
+    
+def serial_a_modbus_on():
+    # GPIO_10_RELE ahora actúa como selector RS232 / Modbus
+    GPIO.output(GPIO_10_RELE, True)
+    GPIO.output(GPIO_05_PILOTO, True)
+    util.logging.info("Selector comunicación: MODO MODBUS RS485")
+
+def serial_a_modbus_off():
+    # Retorna el puerto a RS232 para escuchar la caja de pago
+    GPIO.output(GPIO_10_RELE, False)
+    GPIO.output(GPIO_05_PILOTO, False)
+    util.logging.info("Selector comunicación: MODO RS232 CAJA/POS")
+    
 def CarpetaAudios():
   
     base = Path(PATH_FILE_AUDIO)
@@ -161,6 +198,8 @@ except:
     Temp.on_hardware("No hay pto serie ")
     audio_error()
     exit
+    
+RELAY_CONFIG = modbus_relay.cargar_config("/home/pi/.scr/.scr/pyp_CLG/relay_config.yml")
 #------------------------------
 # Funcion principal
 #-----------------------------
@@ -208,7 +247,9 @@ def main():
                 util.logging.info(f"DataRX (decoded): {data}")
         
                 # Visualizar el mensaje recibido
-                display("Premio Ganador:")
+                # Reproduce audio ganador, conmuta a Modbus y activa cabina correspondiente
+                display(f"Premio Ganador Cabina: {data} ", data)
+                #display("Premio Ganador:")
             except UnicodeDecodeError as e:
                 util.logging.error(f"Error de decodificación: {e}")
             except Exception as e:
