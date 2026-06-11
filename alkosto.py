@@ -104,12 +104,12 @@ def display(msj, data_serial=None):
     except Exception as e:
         util.logging.error(f"No se pudo activar cabina ganadora por Modbus: {e}")
         serial_a_modbus_off()
-#def display(msj):  
-#    reporte(msj)
-#    rele_bombillo_on()
-#    audio_ganador()
-#    time.sleep(10)
-#    rele_bombillo_off()
+def display_pulsador(msj):  
+    reporte(msj)
+    rele_bombillo_on()
+    audio_ganador()
+    time.sleep(10)
+    rele_bombillo_off()
 def on_hardware(msj):   
     print(msj + ' ' + time.strftime(FORMATO_DATE))
     reporte(msj)
@@ -269,7 +269,7 @@ def main():
          
         elif GPIO.input(GPIO_06_PULSADOR) == 1: #0
              util.logging.info("mi premio PULSADOR")
-             display("Premio Ganador: PULSADOR")  
+             display_pulsador("Premio Ganador: PULSADOR")  
         
         if timerPublicidad <= 0:
             timerPublicidad=PERIODO_PUBLICIDAD
