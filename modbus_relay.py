@@ -162,8 +162,8 @@ class ModbusRelayController:
                 self.relay_on(slave_id)
                 time.sleep(on_time)
 
-                self.relay_off(slave_id)
-                time.sleep(off_time)
+                #self.relay_off(slave_id)
+                #time.sleep(off_time)
 
         except Exception as e:
             self.logger.error(f"Error durante titileo Modbus de {nombre}: {e}")
