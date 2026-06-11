@@ -165,7 +165,7 @@ class ModbusRelayController:
         try:
             if self.serial_port.in_waiting > 0:
                 respuesta = self.serial_port.read(self.serial_port.in_waiting)
-                self.logger.info(f"Modbus RX: {respuesta.hex(' ').upper()}")
+                #self.logger.info(f"Modbus RX: {respuesta.hex(' ').upper()}")
         except Exception as e:
             self.logger.warning(f"No se pudo leer respuesta Modbus: {e}")
 
