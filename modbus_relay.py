@@ -152,8 +152,9 @@ class ModbusRelayController:
         Envía una trama Modbus RTU por el mismo puerto serial.
         El puerto ya debe estar conmutado físicamente a RS485.
         """
-        self.logger.info(f"{descripcion}: {frame.hex(' ').upper()}")
-
+        #self.logger.info(f"{descripcion}: {frame.hex(' ').upper()}")
+        self.logger.info(f"{descripcion}")
+        
         self.serial_port.reset_input_buffer()
         self.serial_port.reset_output_buffer()
         self.serial_port.write(frame)
