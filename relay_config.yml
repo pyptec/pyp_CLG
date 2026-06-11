@@ -45,3 +45,25 @@ cabinas:
     enabled: true
     nombre: "Cabina 06"
     slave_id: 6
+
+  "07":
+    enabled: true
+    nombre: "Cabina 07"
+    slave_id: 7   
+
+  "08":
+    enabled: true
+    nombre: "Cabina 08"   
+    slave_id: 8
+
+  "09":
+    enabled: true
+    nombre: "Cabina 09" 
+    slave_id: 9
+
+  "10":
+    enabled: true
+    nombre: "Cabina 10" 
+    slave_id: 10
+
+    
